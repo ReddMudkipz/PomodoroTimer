@@ -9,18 +9,18 @@ local sound_source_name             = "AlertSound"
 local break_bgm_source_name         = "BreakBGM"
 local session_limit_bgm_source_name = "SessionLimitMusic"
 
-local focus_duration_minutes = 240
-local short_break_minutes    = 10
+local focus_duration_minutes = 25
+local short_break_minutes    = 5
 local long_break_minutes     = 10
-local session_limit          = 12
+local session_limit          = 6
 
 local progress_bar_source    = "PomodoroProgressBar"
-local progress_bar_blocks    = 12
+local progress_bar_blocks    = 20
 local blink_state            = false
 
-local focus_message              = "Focus Time!"
-local short_break_message        = "Short Break!"
-local session_limit_reached_message = "Session Limit Reached!"
+local focus_message              = "Focus Time"
+local short_break_message        = "Short Break"
+local session_limit_reached_message = "Long Break"
 
 local fast_mode      = false
 local time_multiplier = 1
@@ -66,11 +66,11 @@ local function update_minute_progress_bar()
   local bar = ""
   for i = 1, blocks do
     if i <= filled_blocks then
-      bar = bar .. "█"
-    elseif i == filled_blocks + 1 then
-      bar = bar .. (blink_state and "░" or " ")
+      bar = bar .. "▮"
+    -- elseif i == filled_blocks + 1 then
+    --  bar = bar .. (blink_state and "▯" or " ")
     else
-      bar = bar .. "░"
+      bar = bar .. "▯"
     end
   end
 
