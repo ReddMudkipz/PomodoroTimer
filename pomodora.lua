@@ -15,7 +15,7 @@ local long_break_minutes     = 10
 local session_limit          = 6
 
 local progress_bar_source    = "PomodoroProgressBar"
-local progress_bar_blocks    = 30
+local progress_bar_blocks    = focus_duration_minutes
 local blink_state            = false
 
 local focus_message              = "Focus Time"
@@ -66,11 +66,11 @@ local function update_minute_progress_bar()
   local bar = ""
   for i = 1, blocks do
     if i <= filled_blocks then
-      bar = bar .. "▮"
+      bar = bar .. "■"
     elseif i == filled_blocks + 1 then
-      bar = bar .. (blink_state and "▯" or "▮")
+      bar = bar .. (blink_state and "□" or "◧")
     else
-      bar = bar .. "▯"
+      bar = bar .. "□"
     end
   end
 
