@@ -9,13 +9,13 @@ local sound_source_name             = "AlertSound"
 local break_bgm_source_name         = "BreakBGM"
 local session_limit_bgm_source_name = "SessionLimitMusic"
 
-local focus_duration_minutes = 25
-local short_break_minutes    = 5
+local focus_duration_minutes = 30
+local short_break_minutes    = 10
 local long_break_minutes     = 10
 local session_limit          = 6
 
 local progress_bar_source    = "PomodoroProgressBar"
-local progress_bar_blocks    = 20
+local progress_bar_blocks    = 30
 local blink_state            = false
 
 local focus_message              = "Focus Time"
@@ -67,8 +67,8 @@ local function update_minute_progress_bar()
   for i = 1, blocks do
     if i <= filled_blocks then
       bar = bar .. "▮"
-    -- elseif i == filled_blocks + 1 then
-    --  bar = bar .. (blink_state and "▯" or " ")
+    elseif i == filled_blocks + 1 then
+      bar = bar .. (blink_state and "▯" or "▮")
     else
       bar = bar .. "▯"
     end
