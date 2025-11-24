@@ -60,7 +60,12 @@ local function update_minute_progress_bar()
   local blocks = progress_bar_blocks
 
   local per_block = total / blocks
-  local filled_blocks = math.floor(filled / per_block)
+  local filled_blocks = 0
+  if mode == "focus" then
+    filled_blocks = math.floor(filled / per_block)
+  else
+    filled_blocks = total
+  end
   if filled_blocks > blocks then filled_blocks = blocks end
 
   local bar = ""
