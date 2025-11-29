@@ -29,6 +29,7 @@ local time_multiplier = 1
 -- Timer State
 ----------------------------------------------------------
 local timer_active             = false
+local pause = false
 local time_left                = focus_duration_minutes * 60
 local session_count            = 0
 local mode                     = "focus"
@@ -191,6 +192,23 @@ function start_timer()
   end
 end
 
+function playpause_timer()
+  timer_active = not timer_active
+  pause = not pause
+  if pause then
+    if mode == "focus" then
+      local m, s = math.floor(time_left/60), time_left%60
+      set_timer_text(string.format(
+        "%s\nSession: %d/%d\n%02d:%02d", -- Made changes here
+        focus_message .. " (PAUSE)", session_count+1, session_limit, m, s
+      ))
+    else
+      local m, s = math.floor(time_left/60), time_left%60
+      set_timer_text(string.format("%s\n%02d:%02d", short_break_message .. " (PAUSE)", m, s))
+    end
+  end
+end
+
 function stop_timer()
   if timer_active then timer_active = false end
   -- full reset
@@ -209,6 +227,7 @@ end
 -- Button Handlers
 ----------------------------------------------------------
 local function on_start_button_clicked()  start_timer() return false end
+local function on_playpause_button_clicked() playpause_timer() return false end
 local function on_stop_button_clicked()   stop_timer()  return false end
 local function on_skip_timer_button_clicked()
   if mode == "focus" then
@@ -220,7 +239,11 @@ local function on_skip_timer_button_clicked()
     else
       mode = "short_break"
       time_left = short_break_minutes * 60
-      set_timer_text(short_break_message)
+      if pause then
+        set_timer_text(short_break_message .. " (PAUSE)")
+      else
+        set_timer_text(short_break_message)
+      end
       play_alert_sound()
       play_media(break_bgm_source_name)
     end
@@ -231,7 +254,11 @@ local function on_skip_timer_button_clicked()
     play_alert_sound()
     mode = "focus"
     time_left = focus_duration_minutes * 60
-    set_timer_text(focus_message)
+    if pause then
+      set_timer_text(focus_message .. " (PAUSE)")
+    else
+      set_timer_text(focus_message)
+    end
     session_progress_minutes = 0
     update_minute_progress_bar()
   end
@@ -254,6 +281,7 @@ end
 function script_properties()
   local p = obs.obs_properties_create()
   obs.obs_properties_add_button(p, "start_btn", "Start Timer", on_start_button_clicked)
+  obs.obs_properties_add_button(p, "playpause_btn", "Play/Pause Timer", on_playpause_button_clicked)
   obs.obs_properties_add_button(p, "stop_btn",  "Stop Timer",  on_stop_button_clicked)
   obs.obs_properties_add_button(p, "skip_btn",  "Skip Session", on_skip_timer_button_clicked)
   obs.obs_properties_add_bool(p, "fast_mode", "Fast Mode (Testing)")
