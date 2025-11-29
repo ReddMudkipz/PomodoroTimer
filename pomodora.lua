@@ -184,12 +184,12 @@ end
 -- Start/Stop Timer
 ----------------------------------------------------------
 function start_timer()
-  if not timer_active then
-    time_left = focus_duration_minutes * 60
-    session_progress_minutes = 0
-    update_minute_progress_bar()
-    timer_active = true
-  end
+  time_left = focus_duration_minutes * 60
+  session_progress_minutes = 0
+  update_minute_progress_bar()
+  timer_active = true
+  pause = false
+  mode = "focus"
 end
 
 function playpause_timer()
@@ -280,7 +280,7 @@ end
 
 function script_properties()
   local p = obs.obs_properties_create()
-  obs.obs_properties_add_button(p, "start_btn", "Start Timer", on_start_button_clicked)
+  obs.obs_properties_add_button(p, "start_btn", "Start/Reset Focus Session", on_start_button_clicked)
   obs.obs_properties_add_button(p, "playpause_btn", "Play/Pause Timer", on_playpause_button_clicked)
   obs.obs_properties_add_button(p, "stop_btn",  "Stop Timer",  on_stop_button_clicked)
   obs.obs_properties_add_button(p, "skip_btn",  "Skip Session", on_skip_timer_button_clicked)
